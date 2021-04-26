@@ -2,21 +2,30 @@ import {
   StyleSheet,
   Dimensions,
 } from "react-native";
+
 import colors from "../../styles/colors";
+import fonts from '../../styles/fonts';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
+  },
+
+  wrapper: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'space-around',
+    paddingHorizontal: 10,
   },
 
   title: {
     marginTop: 38,
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: 'bold',
     textAlign: 'center',
     color: colors.heading,
+    fontFamily: fonts.heading,
+    lineHeight: 38,
   },
 
   subtitle: {
@@ -24,6 +33,7 @@ export default StyleSheet.create({
     fontSize: 18,
     paddingHorizontal: 20,
     color: colors.heading,
+    fontFamily: fonts.text,
   },
   
   image: {
@@ -41,8 +51,8 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
 
-  buttonText: {
+  buttonIcon: {
+    fontSize: 32,
     color: colors.white,
-    fontSize: 24,
   },
 });
