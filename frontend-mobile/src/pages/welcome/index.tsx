@@ -7,11 +7,17 @@ import {
   View,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 import wateringImg from '../../assets/watering.png';
 import styles from './styles';
 
 export function Welcome() {
+  const navigation = useNavigation();
+
+  function handleStart(): void {
+    navigation.navigate('UserIdentification');
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,6 +42,7 @@ export function Welcome() {
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.7}
+          onPress={handleStart}
         >
           <Feather 
             style={styles.buttonIcon} 
