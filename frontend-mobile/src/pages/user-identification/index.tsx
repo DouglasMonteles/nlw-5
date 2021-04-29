@@ -5,7 +5,9 @@ import {
   TextInput,
   View, 
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
   Platform,
+  Keyboard,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -44,38 +46,42 @@ export function UserIdentification() {
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View style={styles.content}>
-          <View style={styles.form}>
-            <View style={styles.header}>
-              <Text style={styles.emoji}>
-                {isFilled ? '😁' : '🙂'}
-              </Text>
+        <TouchableWithoutFeedback
+          onPress={Keyboard.dismiss}
+        >
+          <View style={styles.content}>
+            <View style={styles.form}>
+              <View style={styles.header}>
+                <Text style={styles.emoji}>
+                  {isFilled ? '😁' : '🙂'}
+                </Text>
 
-              <Text style={styles.title}>
-                Como podemos {'\n'} 
-                chamar você?
-              </Text>
-            </View>
+                <Text style={styles.title}>
+                  Como podemos {'\n'} 
+                  chamar você?
+                </Text>
+              </View>
 
-            <TextInput 
-              style={[
-                styles.input,
-                (isFocused || isFilled) && { borderBottomColor: colors.green }
-              ]}
-              placeholder="Escreva seu nome"
-              onBlur={handleInputBlur}
-              onFocus={handleInputFocus}
-              onChangeText={handleInputChange}
-            />
-            
-            <View style={styles.footer}>
-              <Button 
-                title="Confirmar"
-                onPress={handleSubmit}
+              <TextInput 
+                style={[
+                  styles.input,
+                  (isFocused || isFilled) && { borderBottomColor: colors.green }
+                ]}
+                placeholder="Escreva seu nome"
+                onBlur={handleInputBlur}
+                onFocus={handleInputFocus}
+                onChangeText={handleInputChange}
               />
+              
+              <View style={styles.footer}>
+                <Button 
+                  title="Confirmar"
+                  onPress={handleSubmit}
+                />
+              </View>
             </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
