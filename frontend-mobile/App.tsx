@@ -9,6 +9,7 @@ import {
 
 import { Welcome } from './src/pages/welcome';
 import { UserIdentification } from './src/pages/user-identification';
+import { Confirmation } from './src/pages/confirmation';
 
 export default function App() {
   const [ fontsLoaded ] = useFonts({
@@ -21,7 +22,7 @@ export default function App() {
   }
 
   return (
-    <UserIdentification />
+    <Confirmation />
   );
 }
 
