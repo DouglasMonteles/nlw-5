@@ -7,6 +7,7 @@ import {
 import styles from './styles';
 
 import { Header } from '../../components/header';
+import { EnviromentButton } from '../../components/enviroment-button';
 
 export function PlantSelect() {
   
@@ -23,6 +24,11 @@ export function PlantSelect() {
           você quer colocar sua planta?
         </Text>
       </View>
+
+      <EnviromentButton
+        title="Cozinha"
+        active
+      />
     </View>
   );
 }
