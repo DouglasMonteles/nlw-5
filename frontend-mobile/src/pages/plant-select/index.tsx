@@ -17,10 +17,14 @@ import { PlantCardPrimary } from '../../components/plant-card-primary';
 export function PlantSelect() {
   const [environments, setEnvironments] = useState<EnvironmentProps[]>([]);
   const [plants, setPlants] = useState<PlantProps[]>([]);
+  const [filteredPlants, setFilteredPlants] = useState<PlantProps[]>();
+  const [environmentSelected, setEnvironmentSelected] = useState('all');
 
   useEffect(() => {
     async function fetchEnviroment() {
-      const { data } = await api.get<EnvironmentProps[]>('plants_environments');
+      const { data } = await api
+        .get<EnvironmentProps[]>('plants_environments?_sort=title&_order=asc');
+
       setEnvironments([
         { 
           key: 'all',
@@ -35,12 +39,26 @@ export function PlantSelect() {
 
   useEffect(() => {
     async function fetchPlants() {
-      const { data } = await api.get<PlantProps[]>('plants');
+      const { data } = await api
+        .get<PlantProps[]>('plants?_sort=name&_order=esc');
       setPlants(data);
     }
 
     fetchPlants();
   }, []);
+
+  function handleEnvironmentSelected(environment: string): void {
+    setEnvironmentSelected(environment);
+
+    if (environment === 'all') {
+      return setFilteredPlants(plants);
+    } 
+
+    const filtered = plants
+      .filter(plant => plant.environments.includes(environment));
+    
+    setFilteredPlants(filtered);
+  }
 
   return (
     <View style={styles.container}>
@@ -65,6 +83,8 @@ export function PlantSelect() {
           renderItem={({ item }) => (
             <EnviromentButton
               title={item.title}
+              active={item.key === environmentSelected}
+              onPress={() => handleEnvironmentSelected(item.key)}
             />
           )}
         />
@@ -75,7 +95,7 @@ export function PlantSelect() {
             numColumns={2}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.contentContainerStyle}
-            data={plants}
+            data={filteredPlants}
             renderItem={({ item }) => (
               <PlantCardPrimary
                 key={item.id}
