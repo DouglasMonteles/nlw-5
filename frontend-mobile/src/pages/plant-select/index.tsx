@@ -6,14 +6,17 @@ import {
 } from 'react-native';
 
 import styles from './styles';
+import api from '../../services/api';
+import EnvironmentProps from '../../models/EnvironmentProps';
+import PlantProps from '../../models/PlantProps';
 
 import { Header } from '../../components/header';
 import { EnviromentButton } from '../../components/enviroment-button';
-import EnvironmentProps from '../../models/EnvironmentProps';
-import api from '../../services/api';
+import { PlantCardPrimary } from '../../components/plant-card-primary';
 
 export function PlantSelect() {
   const [environments, setEnvironments] = useState<EnvironmentProps[]>([]);
+  const [plants, setPlants] = useState<PlantProps[]>([]);
 
   useEffect(() => {
     async function fetchEnviroment() {
@@ -28,6 +31,15 @@ export function PlantSelect() {
     }
 
     fetchEnviroment();
+  }, []);
+
+  useEffect(() => {
+    async function fetchPlants() {
+      const { data } = await api.get<PlantProps[]>('plants');
+      setPlants(data);
+    }
+
+    fetchPlants();
   }, []);
 
   return (
@@ -56,6 +68,21 @@ export function PlantSelect() {
             />
           )}
         />
+      </View>
+
+      <View style={styles.plants}>
+          <FlatList 
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.contentContainerStyle}
+            data={plants}
+            renderItem={({ item }) => (
+              <PlantCardPrimary
+                key={item.id}
+                data={item}
+              />
+            )}
+          />
       </View>
     </View>
   );

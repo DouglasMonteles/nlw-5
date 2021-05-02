@@ -35,4 +35,14 @@ export default StyleSheet.create({
     paddingRight: 32,
     marginVertical: 32,
   },
+
+  plants: {
+    flex: 1,
+    paddingHorizontal: 32,
+    justifyContent: 'center',
+  },
+
+  contentContainerStyle: {
+    
+  },
 });
