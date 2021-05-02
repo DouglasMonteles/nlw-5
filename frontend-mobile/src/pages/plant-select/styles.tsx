@@ -26,4 +26,13 @@ export default StyleSheet.create({
     lineHeight: 20,
     color: colors.heading,
   },
+
+  enviromentList: {
+    height: 40,
+    justifyContent: 'center',
+    paddingBottom: 5,
+    marginLeft: 32,
+    paddingRight: 32,
+    marginVertical: 32,
+  },
 });
