@@ -3,6 +3,7 @@ import {
   View,
   Text,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 
 import styles from './styles';
@@ -13,12 +14,18 @@ import PlantProps from '../../models/PlantProps';
 import { Header } from '../../components/header';
 import { EnviromentButton } from '../../components/enviroment-button';
 import { PlantCardPrimary } from '../../components/plant-card-primary';
+import { Load } from '../../components/load';
+import colors from '../../styles/colors';
 
 export function PlantSelect() {
   const [environments, setEnvironments] = useState<EnvironmentProps[]>([]);
   const [plants, setPlants] = useState<PlantProps[]>([]);
-  const [filteredPlants, setFilteredPlants] = useState<PlantProps[]>();
+  const [filteredPlants, setFilteredPlants] = useState<PlantProps[]>([]);
   const [environmentSelected, setEnvironmentSelected] = useState('all');
+  const [loading, setLoading] = useState(true);
+
+  const [page, setPage] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   useEffect(() => {
     async function fetchEnviroment() {
@@ -38,26 +45,55 @@ export function PlantSelect() {
   }, []);
 
   useEffect(() => {
-    async function fetchPlants() {
-      const { data } = await api
-        .get<PlantProps[]>('plants?_sort=name&_order=esc');
-      setPlants(data);
-    }
-
     fetchPlants();
   }, []);
 
-  function handleEnvironmentSelected(environment: string): void {
+  async function fetchPlants() {
+    const { data } = await api
+      .get<PlantProps[]>(`plants?_sort=name&_order=asc&_page=${page}&_limit=6`);
+      
+    if (!data) {
+      return setLoading(true);
+    }
+
+    if (page > 1) {
+      setPlants(oldValue => [...oldValue, ...data]);
+      setFilteredPlants(oldValue => [...oldValue, ...data]);
+    } else {
+      setPlants(data);
+      setFilteredPlants(data);
+    }
+
+    setLoading(false);
+    setLoadingMore(false);
+  }
+
+  function handleEnvironmentSelected(environment: string) {
     setEnvironmentSelected(environment);
 
-    if (environment === 'all') {
+    if (environment == 'all') {
       return setFilteredPlants(plants);
     } 
 
-    const filtered = plants
-      .filter(plant => plant.environments.includes(environment));
+    const filtered = plants.filter(plant => 
+      plant.environments.includes(environment)
+    );
     
     setFilteredPlants(filtered);
+  }
+
+  function handleFetchMore(distance: number) {
+    if (distance < 1) {
+      return;
+    }
+
+    setLoadingMore(true);
+    setPage(oldValue => oldValue + 1);
+    fetchPlants();
+  }
+
+  if (loading) {
+    return <Load />;
   }
 
   return (
@@ -95,6 +131,9 @@ export function PlantSelect() {
             numColumns={2}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.contentContainerStyle}
+            onEndReachedThreshold={0.15} // Porcentagem final da tela que inicia o fetch
+            onEndReached={({ distanceFromEnd }) => 
+                handleFetchMore(distanceFromEnd)}
             data={filteredPlants}
             renderItem={({ item }) => (
               <PlantCardPrimary
@@ -102,6 +141,16 @@ export function PlantSelect() {
                 data={item}
               />
             )}
+            ListFooterComponent={
+              <>
+                {
+                  loadingMore &&
+                  <ActivityIndicator 
+                    color={colors.green}
+                  />
+                }
+              </> 
+            }
           />
       </View>
     </View>
