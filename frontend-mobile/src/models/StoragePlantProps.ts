@@ -10,6 +10,8 @@ export interface StoragePlantProps {
 
 export async function savePlantInStorage(plant: PlantProps): Promise<void> {
   try {
+    
+
     const data = await AsyncStorage.getItem('@plantmanager:plants');
     const oldPlants = data ? (JSON.parse(data) as StoragePlantProps) : {};
 
@@ -53,4 +55,13 @@ export async function loadPlants(): Promise<PlantProps[]> {
   } catch (error) {
     throw new Error(error);
   }
+}
+
+export async function removePlant(id: number): Promise<void> {
+  const data = await AsyncStorage.getItem('@plantmanager:plants');
+  const plants = data ? (JSON.parse(data) as StoragePlantProps) : {};
+  
+  delete plants[id];
+
+  await AsyncStorage.setItem('@plantmanager:plants', JSON.stringify(plants));
 }
