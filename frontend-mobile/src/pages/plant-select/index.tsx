@@ -5,6 +5,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 
 import styles from './styles';
 import api from '../../services/api';
@@ -26,6 +27,8 @@ export function PlantSelect() {
 
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     async function fetchEnviroment() {
@@ -92,6 +95,10 @@ export function PlantSelect() {
     fetchPlants();
   }
 
+  function handlePlantSelect(plant: PlantProps) {
+    navigation.navigate('PlantSave', { plant });
+  }
+
   if (loading) {
     return <Load />;
   }
@@ -112,6 +119,7 @@ export function PlantSelect() {
 
       <View>
         <FlatList 
+          keyExtractor={(item) => String(item.key)}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.enviromentList}
@@ -128,6 +136,7 @@ export function PlantSelect() {
 
       <View style={styles.plants}>
           <FlatList 
+            keyExtractor={(item) => String(item.id)}
             numColumns={2}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.contentContainerStyle}
@@ -139,6 +148,7 @@ export function PlantSelect() {
               <PlantCardPrimary
                 key={item.id}
                 data={item}
+                onPress={() => handlePlantSelect(item)}
               />
             )}
             ListFooterComponent={

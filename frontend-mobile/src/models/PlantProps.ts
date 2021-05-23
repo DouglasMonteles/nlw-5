@@ -10,7 +10,8 @@ export default interface PlantProps {
   frequency: {
     times: number,
     repeat_every: RepeatProps,
-  }
+  },
+  dateTimeNotification: Date;
 }
 
 enum RepeatProps {
