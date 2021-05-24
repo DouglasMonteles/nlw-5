@@ -57,8 +57,8 @@ npm start
 
 # Autor
 
-<p style="display: flex; align-items: center; font-size: 15pt">
-  <img style="width: 50px; border-radius: 25px; margin-right: 10px" src="https://avatars.githubusercontent.com/u/54580766?v=4"> 
+<p>
+  <img width="50" src="https://avatars.githubusercontent.com/u/54580766?v=4"> &nbsp;
   Douglas da Silva Monteles
 </p>
 
