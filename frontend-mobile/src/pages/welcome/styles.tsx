@@ -21,7 +21,6 @@ export default StyleSheet.create({
   title: {
     marginTop: 38,
     fontSize: 28,
-    fontWeight: 'bold',
     textAlign: 'center',
     color: colors.heading,
     fontFamily: fonts.heading,
